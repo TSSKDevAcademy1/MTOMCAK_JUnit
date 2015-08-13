@@ -49,13 +49,13 @@ public class TestRunner {
 				
 			}
 		}
-		runPostConstruct(clazz, testCase); 	// run all PostConstruct annotations
+		//runMethodByAnnotation( testCase, Test.class); 	// run all PostConstruct annotations
 		runMethod(clazz, testCase);			// run all Test annotations
 	}
 
-	private void runPostConstruct(Class<?> clazz, Object testCase) {
+	private void runMethodByAnnotation(Object testCase, Class<? extends Annotation> clazz) {
 		for (Method method : clazz.getMethods()) {
-			if (method.isAnnotationPresent(PostConstruct.class)) {
+			if (method.isAnnotationPresent(clazz)) {
 				timeMethod = System.currentTimeMillis();
 				System.out.printf("Running PostConstruct: %s.%s\n", clazz.getName(), method.getName());
 				methodsCount++;
@@ -88,8 +88,10 @@ public class TestRunner {
 
 	/**Run all test methods.*/
 	private void runMethod(Class<?> clazz, Object testCase) {
-		Class<?> t = PostConstruct.class;
-		System.out.println(PostConstruct.class +" \ninterface " + clazz.getTypeName() + "\n\n\n");
+		//Annotation clazzs = clazz.getAnnotation(Test.class);
+//		Class<?> t = PostConstruct.class;
+//		System.out.println(PostConstruct.class +" \ninterface " + clazz.getTypeName() + "\n\n\n");
+		
 		timeTestCase = System.currentTimeMillis();
 		for (Method method : clazz.getMethods()) {
 			if (method.isAnnotationPresent(Test.class)) {
@@ -111,7 +113,6 @@ public class TestRunner {
 		}
 		writeResult();
 		counterReset();
-		System.out.println(t.getAnnotations());
 	}
 		
 
